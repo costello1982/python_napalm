@@ -1,6 +1,25 @@
 # Python Network Programming for Network Engineers (Python 3)
- sudo apt-get update
- 
- sudo apt install python3-pip
 
- pip3 install -U netmiko
+NAPALM INSTALL: 
+===============
+These steps are only required if you don't have Netmiko and NAPALM installed. See the below steps for Python3 NAPALM
+
+apt-get update
+apt-get install python -y
+apt-get install build-essential libssl-dev libffi-dev -y
+apt-get install python-pip -y
+pip install cryptography
+pip install netmiko
+pip install napalm
+
+PYTHON3 NAPALM INSTALL:
+========================
+Use the following commands to install Python3 Netmiko and NAPALM:
+
+apt-get update
+apt-get install python3-pip
+pip3 install -U netmiko
+pip3 install -U napalm
+pip3 install -U simplejson
+ 
+ 
