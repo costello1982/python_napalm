@@ -24,3 +24,6 @@ pip3 install -U simplejson
 pip3 install --upgrade pipenv
  
  JSON allows us to format in human readable format
+
+
+https://app.freedev.ai
