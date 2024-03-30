@@ -81,6 +81,8 @@ def device_type(device):
         return "It's a Cisco Switch"
     if device == '2950':
         return "It's a Cisco Switch"
+    else:
+        return "It's a shit"
 
 whatdevice = input("Enter device [1800,2900,3750,2950]:")
 answer = device_type(whatdevice)
