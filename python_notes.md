@@ -90,4 +90,39 @@ answer = device_type(whatdevice)
 print(answer)
 ```
 
+```
+def create_vlans(vlan_no, vlan_name):
+    return {'vlan': vlan_no, 'name': vlan_name}
+
+vlan_no = input("Enter VLAN number:")
+vlan_name = input("Enter VLAN name:")
+answer = create_vlans(vlan_no, vlan_name)
+
+print(answer)
+```
+
+```
+from netmiko import ConnectHandler
+
+def netmiko_connection(ip):
+    return{
+    'device_type': 'cisco_nxos',
+    'ip': ip,
+    'username': 'admin',
+    'password': 'admin',
+    }
+
+device_list = ['10.90.200.11',
+               '10.90.200.12',
+               '10.90.200.13'
+              ]
+
+for ip in device_list:
+    nxos = netmiko_connection(ip)
+    print(nxos)
+    net_connect = ConnectHandler(**nxos)
+    output = net_connect.send_command('show interface status')
+    print(output)
+```
+
 
