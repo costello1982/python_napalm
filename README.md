@@ -28,3 +28,12 @@ JSON allows us to format in human readable format
 
 
 https://app.freedev.ai
+
+```
+import ipaddress
+
+ip = "192.168.2.14"
+subnet = ipaddress.ip_network(f"{ip}/24", strict=False)
+print(subnet)
+
+```
