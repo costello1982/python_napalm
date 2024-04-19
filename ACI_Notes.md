@@ -40,7 +40,9 @@ Class or DN or URL: fvTenant    then Run Query
 
 
 ## ACI GUI Configuration
+
 ```
+
 ### Logical
  - Tenant, EPG, BD, Contract, etc.
 ### Physical
@@ -72,7 +74,9 @@ Class or DN or URL: fvTenant    then Run Query
                                 5.3. VPC Interface (For LACP between two Leaf Switches)
 6. Create Interface Profile: Fabric > Access Policies > Interfaces > Profile > Right Click Create (Leaf201_IntProf)
                                 - Interface Selector > Select all interfaces 1/1-36 and description will be MDC Leaf
+
 ```
+
 https://www.youtube.com/watch?v=7-gsSFeuwE8
 
 
