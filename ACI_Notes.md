@@ -38,7 +38,9 @@ Class or DN or URL: fvTenant    then Run Query
 - MGMT Tenant to manage the system, APIC want's to talk to vCenter it will use MGMT VRF. 
 - INFRA Tenant is where the IS-IS is running and everything for the ACI infra. You don't want to touch this.
 
+
 ## ACI GUI Configuration
+```
 ### Logical
  - Tenant, EPG, BD, Contract, etc.
 ### Physical
@@ -70,7 +72,7 @@ Class or DN or URL: fvTenant    then Run Query
                                 5.3. VPC Interface (For LACP between two Leaf Switches)
 6. Create Interface Profile: Fabric > Access Policies > Interfaces > Profile > Right Click Create (Leaf201_IntProf)
                                 - Interface Selector > Select all interfaces 1/1-36 and description will be MDC Leaf
-
+```
 https://www.youtube.com/watch?v=7-gsSFeuwE8
 
 
