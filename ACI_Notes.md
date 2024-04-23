@@ -74,6 +74,12 @@ Class or DN or URL: fvTenant    then Run Query
                                 5.3. VPC Interface (For LACP between two Leaf Switches)
 6. Create Interface Profile: Fabric > Access Policies > Interfaces > Profile > Right Click Create (Leaf201_IntProf)
                                 - Interface Selector > Select all interfaces 1/1-36 and description will be MDC Leaf
+7. Create Switch Policy Group: Fabric > Access Policies > Switches > Leaf Switches > Policy Group > Right Click Create (CostelloTN_SW_PGr) I don't see this created in Prod.
+8. Create Switch Profile: Fabric > Access Policies > Switches > Leaf Switches > Profile > Right Click Create (Leaf101_Pro)
+                                - Leaf Selector > Name: 101 > Blocks: 101 > Policy Group: CostelloTN_SW_PGr (We created this at step 7)
+                                - Step 2 > Associations > Leaf201_IntProf (Created at Step 6)
+9. 
+
 
 ```
 
