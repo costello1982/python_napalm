@@ -42,9 +42,6 @@ Class or DN or URL: fvTenant    then Run Query
 ## ACI GUI Configuration
 
 ```
-
-### Logical
- - Tenant, EPG, BD, Contract, etc.
 ### Physical
  - Actual Wire Connection
           - Physical Domain - Bare Metal Server (VLAN-10)
@@ -52,6 +49,9 @@ Class or DN or URL: fvTenant    then Run Query
           - External Bridged Domains - L2 Switch (VLAN-80-90)
           - L3 Domain - L3 Router - (VLAN-60-70)
           - SAN Switch - Fibre Channel Domains (VSAN 101)
+
+### Logical
+ - Tenant, EPG, BD, Contract, etc.
 
 ```
 
@@ -122,17 +122,23 @@ In order to get some endpoints mapped inside some EPGs we need to configure the 
                                 - Mode Trunk
 
 ```
+## Verification:
+```
+apic1# config t
+apic1(config)# leaf 101
+apic1(config-leaf)# show running-config
+# Command: show running-config leaf 101
+# Time: Wed Apr 24 18:42:53 2024
+  leaf 101
+    interface ethernet 1/1
+      # policy-group servername-iDrac_IfPolGr
+      switchport trunk allowed vlan 200 tenant CostelloTN_PROD application 01aPRD_DB_AppProf epg MDC_VL200_EPG
+      exit
+    router bgp 65501
+      exit
+    exit
+```
+- Traffic inside the same EPG will be allowed by default and it will be bridged across the fabric overlay.
+- Traffic to be routed between two EPGs that belong to different BDs need to have contracts applied to EPGs in Application Policy 
+- Traffic to be bridged between EPGs that belong to the same BD need to have contracts applied to EPGs in the Application Policy.
 
-
-https://www.youtube.com/watch?v=7-gsSFeuwE8
-
-
-
-1. Configure VPC Domain: Fabric > Access Policies > Switch Policies > Policies > VPC Domain
-1. Fabric > Access Policies > Quick Start > Configure an interface, PC, and VPC
-   - Select the Leaf Switches and Ports
-   - Create Leaf Access Port Policy Group, Name - AccessPort-PolicyGroup
-                                                - CDP Interface Policy (Default system-cdp-enabled)
-                                                - Link Level Policy (Default system-link-level-10G-auto)
-                                                - LLDP Interface Policy (Default system-lldp-enabled)
-   - Attachable Access Entity Profile > 
