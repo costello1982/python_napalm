@@ -59,14 +59,17 @@ Class or DN or URL: fvTenant    then Run Query
 
 1. Create VLAN Pool: Fabric > Access Policies > Pools > VLAN > Right Click Create VLAN Pool  (CostelloTN_VlanPool)
 
-                                - Allocation Mode: Static Allocation
-                                - Click + Encap Blocks to add the VLAN Range
+                                1.1 Allocation Mode: Static Allocation
+                                1.2 Click + Encap Blocks to add the VLAN Range
                                             - Ex: Vlan Range 10-300
                                             - Static Allocation
 ![VLAN Pool](ACI_Images/Step1.jpg)
 
 2. Create Physical and External Domains: Fabric > Access Policies > Physical and External Domains > Physical Domains > Right Click Create Physical Domain (CostelloTN_PhyDom)
-                                - Select VLAN Pool Created at Step 1 CostelloTN_VlanPool
+
+                                2.1 Select VLAN Pool Created at Step 1 CostelloTN_VlanPool
+![VLAN Pool](ACI_Images/Step2.jpg)
+
 3. Create Attachable Access Entity Profiles (AAEP): Fabric > Access Policies > Policies > Global > Attachable Access Entity Profile > Right Click Create (CostelloTN_AAEProf)
                                 - Click + to add attach the Domain that we created at the Step2 CostelloTN_PhyDom
                                 - For the rest we let them like that for now. Next and Finish.
