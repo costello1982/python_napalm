@@ -60,11 +60,8 @@ Class or DN or URL: fvTenant    then Run Query
 1. Create VLAN Pool: Fabric > Access Policies > Pools > VLAN > Right Click Create VLAN Pool  (CostelloTN_VlanPool)
 
                                 - Allocation Mode: Static Allocation
-
                                 - Click + Encap Blocks to add the VLAN Range
-
                                             - Ex: Vlan Range 10-300
-                                            
                                             - Static Allocation
 ![VLAN Pool](ACI_Images/Step1.jpg)
 
