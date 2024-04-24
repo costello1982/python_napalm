@@ -127,6 +127,7 @@ EPG is an Endpoint group which represents a group of endpoints (VM on a hypervis
 In order to get some endpoints mapped inside some EPGs we need to configure the ports for it (all the config above) plus Application policy below.
 
 1. Creating a Tenant: Tenants > Add Tenant  (CostelloTN_PROD)
+![VLAN Pool](ACI_Images/Logical/Step1.jpg)
 2. Create a VRF: Tenants > CostelloTN_PROD > Networking > VRFs > Right Click Create VRF > 01aPRD_DB_VRF
                                 - uncheck Create A Bridge Domain (We will do this at the next step)
 3. Create a Bridge Domain (BD): Tenants > CostelloTN_PROD > Networking > Bridge Domains > Right Click Create > MDC_VL200_BrDom
