@@ -45,6 +45,7 @@ Class or DN or URL: fvTenant    then Run Query
 ### Physical
 
  - Actual Wire Connection
+ 
           - Physical Domain - Bare Metal Server (VLAN-10)
           - VMM Domain - Virtualized Server (VLAN-20-30; VLAN-40-50)
           - External Bridged Domains - L2 Switch (VLAN-80-90)
