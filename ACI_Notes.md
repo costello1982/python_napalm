@@ -45,7 +45,7 @@ Class or DN or URL: fvTenant    then Run Query
 ### Physical
 
  - Actual Wire Connection
- 
+
           - Physical Domain - Bare Metal Server (VLAN-10)
           - VMM Domain - Virtualized Server (VLAN-20-30; VLAN-40-50)
           - External Bridged Domains - L2 Switch (VLAN-80-90)
@@ -179,3 +179,4 @@ apic1(config-leaf)# show running-config
 - Traffic to be routed between two EPGs that belong to different BDs need to have contracts applied to EPGs in Application Policy 
 - Traffic to be bridged between EPGs that belong to the same BD need to have contracts applied to EPGs in the Application Policy.
 
+https://howdoesinternetwork.com/2019/setting-up-cisco-aci-from-scratch
