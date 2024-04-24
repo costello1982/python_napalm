@@ -41,8 +41,9 @@ Class or DN or URL: fvTenant    then Run Query
 
 ## ACI GUI Configuration
 
-```
+## Part 1
 ### Physical
+
  - Actual Wire Connection
           - Physical Domain - Bare Metal Server (VLAN-10)
           - VMM Domain - Virtualized Server (VLAN-20-30; VLAN-40-50)
@@ -50,10 +51,11 @@ Class or DN or URL: fvTenant    then Run Query
           - L3 Domain - L3 Router - (VLAN-60-70)
           - SAN Switch - Fibre Channel Domains (VSAN 101)
 
+## Part 2
 ### Logical
+
  - Tenant, EPG, BD, Contract, etc.
 
-```
 
 ## Physical Configuration
 
@@ -128,21 +130,30 @@ In order to get some endpoints mapped inside some EPGs we need to configure the 
 
 1. Creating a Tenant: Tenants > Add Tenant  (CostelloTN_PROD)
 ![VLAN Pool](ACI_Images/Logical/Step1.jpg)
-2. Create a VRF: Tenants > CostelloTN_PROD > Networking > VRFs > Right Click Create VRF > 01aPRD_DB_VRF
-                                - uncheck Create A Bridge Domain (We will do this at the next step)
-3. Create a Bridge Domain (BD): Tenants > CostelloTN_PROD > Networking > Bridge Domains > Right Click Create > MDC_VL200_BrDom
-                                - VRF > Select the VRF created at Step 2 > 01aPRD_DB_VRF
-4. Create APP Profile: Tenants > CostelloTN_PROD > Application Profiles > Right Click Create 01aPRD_DB_AppProf
-5. Create Application EPGs: Tenants > CostelloTN_PROD > Application Profiles > 01aPRD_DB_AppProf > Application EPGs > Right Click Create MDC_VL200_EPG
-                                - select the Bridge Domain Created at step 3 MDC_VL200_BrDom
-6. Add Domain to EPG: Tenants > CostelloTN_PROD > Application Profiles > 01aPRD_DB_AppProf > Application EPGs >  MDC_VL200_EPG > Domains >Right Click Add Physical Domain Association > Select CostelloTN_PhyDom                             
-7. Static Port Map to EPG: Tenants > CostelloTN_PROD > Application Profiles > 01aPRD_DB_AppProf > Application EPGs >  MDC_VL200_EPG > Right Click Create:
-                                - Select Node Leaf-101
-                                - Path - 1/1 servername-eth0
-                                - Port Encap VLAN 200
-                                - Deployment Imeddiacy: Immediate 
-                                - Mode Trunk
+2. Create a VRF: Tenants > CostelloTN_PROD > Networking > VRFs > Right Click Create VRF (01aPRD_DB_VRF)
 
+                                2.1 Un-check Create A Bridge Domain (We will do this at the next step)
+![VLAN Pool](ACI_Images/Logical/Step2.jpg)                                
+3. Create a Bridge Domain (BD): Tenants > CostelloTN_PROD > Networking > Bridge Domains > Right Click Create (MDC_VL200_BrDom)
+                                
+                                3.1 VRF > Select the VRF created at Step 2 > 01aPRD_DB_VRF
+![VLAN Pool](ACI_Images/Logical/Step3.jpg)                                
+4. Create APP Profile: Tenants > CostelloTN_PROD > Application Profiles > Right Click Create (01aPRD_DB_AppProf)
+![VLAN Pool](ACI_Images/Logical/Step4.jpg)
+5. Create Application EPGs: Tenants > CostelloTN_PROD > Application Profiles > 01aPRD_DB_AppProf > Application EPGs > Right Click Create (MDC_VL200_EPG)
+                                
+                                5.1 select the Bridge Domain Created at step 3 MDC_VL200_BrDom
+![VLAN Pool](ACI_Images/Logical/Step5.jpg)
+6. Add Domain to EPG: Tenants > CostelloTN_PROD > Application Profiles > 01aPRD_DB_AppProf > Application EPGs >  MDC_VL200_EPG > Domains >Right Click Add Physical Domain Association > Select CostelloTN_PhyDom
+![VLAN Pool](ACI_Images/Logical/Step6.jpg)                             
+7. Static Port Map to EPG: Tenants > CostelloTN_PROD > Application Profiles > 01aPRD_DB_AppProf > Application EPGs >  MDC_VL200_EPG > Right Click Create:
+                                
+                                7.1 Select Node Leaf-101
+                                7.2 Path - 1/1 servername-eth0
+                                7.3 Port Encap VLAN 200
+                                7.5 Deployment Imeddiacy: Immediate 
+                                7.6 Mode Trunk
+![VLAN Pool](ACI_Images/Logical/Step7.jpg)
 
 ## Verification:
 ```
@@ -160,6 +171,9 @@ apic1(config-leaf)# show running-config
       exit
     exit
 ```
+
+### Notes:
+
 - Traffic inside the same EPG will be allowed by default and it will be bridged across the fabric overlay.
 - Traffic to be routed between two EPGs that belong to different BDs need to have contracts applied to EPGs in Application Policy 
 - Traffic to be bridged between EPGs that belong to the same BD need to have contracts applied to EPGs in the Application Policy.
