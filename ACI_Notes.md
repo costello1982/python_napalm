@@ -55,7 +55,6 @@ Class or DN or URL: fvTenant    then Run Query
 
 ```
 
-```
 ## Physical Configuration
 
 1. Create VLAN Pool: Fabric > Access Policies > Pools > VLAN > Right Click Create VLAN Pool  (CostelloTN_VlanPool)
@@ -63,6 +62,8 @@ Class or DN or URL: fvTenant    then Run Query
                                 - Click + Encap Blocks to add the VLAN Range    
                                             - Ex: Vlan Range 10-300
                                             - Static Allocation
+![VLAN Pool](ACI_Images/Step1.jpg)
+
 2. Create Physical and External Domains: Fabric > Access Policies > Physical and External Domains > Physical Domains > Right Click Create Physical Domain (CostelloTN_PhyDom)
                                 - Select VLAN Pool Created at Step 1 CostelloTN_VlanPool
 3. Create Attachable Access Entity Profiles (AAEP): Fabric > Access Policies > Policies > Global > Attachable Access Entity Profile > Right Click Create (CostelloTN_AAEProf)
@@ -121,7 +122,7 @@ In order to get some endpoints mapped inside some EPGs we need to configure the 
                                 - Deployment Imeddiacy: Immediate 
                                 - Mode Trunk
 
-```
+
 ## Verification:
 ```
 apic1# config t
