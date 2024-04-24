@@ -58,9 +58,13 @@ Class or DN or URL: fvTenant    then Run Query
 ## Physical Configuration
 
 1. Create VLAN Pool: Fabric > Access Policies > Pools > VLAN > Right Click Create VLAN Pool  (CostelloTN_VlanPool)
+
                                 - Allocation Mode: Static Allocation
-                                - Click + Encap Blocks to add the VLAN Range    
+
+                                - Click + Encap Blocks to add the VLAN Range
+
                                             - Ex: Vlan Range 10-300
+                                            
                                             - Static Allocation
 ![VLAN Pool](ACI_Images/Step1.jpg)
 
@@ -75,12 +79,12 @@ Class or DN or URL: fvTenant    then Run Query
 5. Create Interface Profile: Fabric > Access Policies > Interfaces > Leaf Interfaces > Profile > Right Click Create (Leaf101_IntProf), then Submit without adding Interface Selectors.
                                 - Now we create Leaf Interface Profiles, objects that will be created only once and will represent the Interfaces of each Leaf. Later when you would need a new port configured on ACI, you will just add Interface Selector inside one of the Leafs Interface Profiles.
 6. Create Access Interface Policy Group: Fabric > Access Policies > Interfaces > Leaf Interfaces > Policy Groups > Here we got 3 options:
-                                5.1. Leaf Access Port (Access Port) > Right Click Create
-                                    5.1.1. Name (servername-iDrac_IfPolGr), Description - Server port description usually.
-                                    5.1.2. Attach Entity Profile Created at Step 3 CostelloTN_AAEProf
-                                    5.1.3. Select CDP enable, LLDP enable, Link Level Policy 10G..., Submit
-                                5.2. PC Interface (Port-Channel)
-                                5.3. VPC Interface (For LACP between two Leaf Switches)
+                                6.1. Leaf Access Port (Access Port) > Right Click Create
+                                    6.1.1. Name (servername-iDrac_IfPolGr), Description - Server port description usually.
+                                    6.1.2. Attach Entity Profile Created at Step 3 CostelloTN_AAEProf
+                                    6.1.3. Select CDP enable, LLDP enable, Link Level Policy 10G..., Submit
+                                6.2. PC Interface (Port-Channel)
+                                6.3. VPC Interface (For LACP between two Leaf Switches)
                                 - Policy Group will be configured once for each type of single port configuration and once for each vPC configuration, because vPC config needs its own ID so it cannot be reused. Note that the most important think that you need to configure is the AAEP in the end because without it all other config done here will simply not be pushed to the Leaf. Most important is CDP-Enable, LLDP-Enable, 10G or 1Ginterface...
 7. Create VPC Domain: This can be created once you create your ACI fabric or after. When you configuring vPC interface teaming you first need to have vPC domain configured which is done for each two pair of vPC Leafs: Fabric > Access Policies > Policies > Switch > Virtual Port Channel Default.
 8. Create VPC Interface with LACP Policy Group: Fabric > Access Policies > Interfaces > Leaf Interfaces > Policy Groups > VPC Interface 
