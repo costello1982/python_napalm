@@ -52,38 +52,12 @@ Class or DN or URL: fvTenant    then Run Query
           - External Bridged Domains - L2 Switch (VLAN-80-90)
           - L3 Domain - L3 Router - (VLAN-60-70)
           - SAN Switch - Fibre Channel Domains (VSAN 101)
- 
-
-1. Create VLAN Pool: Fabric > Access Policies > Pools > VLAN > Right Click Create VLAN Pool  (CostelloTN_VlanPool)
-                                - Vlan Range 10-300
-                                - Static Allocation 
-2. Create Physical and External Domains: Fabric > Access Policies > Physical and External Domains > Physical Domains > Right Click Create Physical Domain (CostelloTN_PhyDom)
-                                - Select VLAN Pool Created at Step 1 CostelloTN_VlanPool
-3. Create Attachable Access Entity Profiles (AAEP): Fabric > Access Policies > Policies > Global > Attachable Access Entity Profile > Right Click Create (CostelloTN_AAEProf)
-                                - Click + to add attach the Domain that we created at the Step2 CostelloTN_PhyDom
-                                - For the rest we let them like that for now. Next and Finish.
-4. Create Interface Policy: Fabric > Access Policies > Policies > Interface
-                                - Create CDP Interface, etc
-                                - In my version they were some defaults that I will use where is already enable. I don't have to configure anything at this step. ACI 6.0(3d)
-5. Create Interface Policy Group: Fabric > Access Policies > Interfaces > Leaf Interfaces > Policy Groups > Here we got 3 options:
-                                5.1. Leaf Access Port (Access Port) > Right Click Create
-                                    5.1.1. Name (servername-iDrac_IfPolGr)
-                                    5.1.2. Attach Entity Profile Created at Step 3 CostelloTN_AAEProf
-                                    5.1.3. Select CDP enable, LLDP enable, Link Level Policy 10G..., Submit
-                                5.2. PC Interface (Port-Channel)
-                                5.3. VPC Interface (For LACP between two Leaf Switches)
-6. Create Interface Profile: Fabric > Access Policies > Interfaces > Profile > Right Click Create (Leaf201_IntProf)
-                                - Interface Selector > Select all interfaces 1/1-36 and description will be MDC Leaf
-7. Create Switch Policy Group: Fabric > Access Policies > Switches > Leaf Switches > Policy Group > Right Click Create (CostelloTN_SW_PGr) I don't see this created in Prod.
-8. Create Switch Profile: Fabric > Access Policies > Switches > Leaf Switches > Profile > Right Click Create (Leaf101_Pro)
-                                - Leaf Selector > Name: 101 > Blocks: 101 > Policy Group: CostelloTN_SW_PGr (We created this at step 7)
-                                - Step 2 > Associations > Leaf201_IntProf (Created at Step 6)
-9. 
-
 
 ```
 
 ```
+## Physical Configuration
+
 1. Create VLAN Pool: Fabric > Access Policies > Pools > VLAN > Right Click Create VLAN Pool  (CostelloTN_VlanPool)
                                 - Allocation Mode: Static Allocation
                                 - Click + Encap Blocks to add the VLAN Range    
@@ -126,6 +100,26 @@ Class or DN or URL: fvTenant    then Run Query
                                                     - In order to get the configuration pushed from APIC to the port, we still have a lot to do. We need to create ACI Application Policy which will define the port to EPG Membership and define the VLANs that are allowed to cross that trunk port.
 
 
+## Logical Configuration
+
+EPG is an Endpoint group which represents a group of endpoints (VM on a hypervisor connected to ACI Leaf or a baremetal server connected the same way). Those endpoints, if placed in the same EPG are allowed to communicate between them selfs. In order for two endpoints from two different EPGs to communicate, those two EPG need to be connected with a contract which allows same IP/TCP/UDP/ICMP or some other communication between them. 
+In order to get some endpoints mapped inside some EPGs we need to configure the ports for it (all the config above) plus Application policy below.
+
+1. Creating a Tenant: Tenants > Add Tenant  (CostelloTN_PROD)
+2. Create a VRF: Tenants > CostelloTN_PROD > Networking > VRFs > Right Click Create VRF > 01aPRD_DB_VRF
+                                - uncheck Create A Bridge Domain (We will do this at the next step)
+3. Create a Bridge Domain (BD): Tenants > CostelloTN_PROD > Networking > Bridge Domains > Right Click Create > MDC_VL200_BrDom
+                                - VRF > Select the VRF created at Step 2 > 01aPRD_DB_VRF
+4. Create APP Profile: Tenants > CostelloTN_PROD > Application Profiles > Right Click Create 01aPRD_DB_AppProf
+5. Create Application EPGs: Tenants > CostelloTN_PROD > Application Profiles > 01aPRD_DB_AppProf > Application EPGs > Right Click Create MDC_VL200_EPG
+                                - select the Bridge Domain Created at step 3 MDC_VL200_BrDom
+6. Add Domain to EPG: Tenants > CostelloTN_PROD > Application Profiles > 01aPRD_DB_AppProf > Application EPGs >  MDC_VL200_EPG > Domains >Right Click Add Physical Domain Association > Select CostelloTN_PhyDom                             
+7. Static Port Map to EPG: Tenants > CostelloTN_PROD > Application Profiles > 01aPRD_DB_AppProf > Application EPGs >  MDC_VL200_EPG > Right Click Create:
+                                - Select Node Leaf-101
+                                - Path - 1/1 servername-eth0
+                                - Port Encap VLAN 200
+                                - Deployment Imeddiacy: Immediate 
+                                - Mode Trunk
 
 ```
 
