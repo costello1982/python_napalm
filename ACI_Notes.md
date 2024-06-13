@@ -60,6 +60,8 @@ Class or DN or URL: fvTenant    then Run Query
 
 ## Physical Configuration
 
+I will create a pool of VLANs which will be used as ENCAP VLANs on access ports of the Leafs, for the simplicity here, I’m just picking all the VLANs there are:
+
 1. Create VLAN Pool: Fabric > Access Policies > Pools > VLAN > Right Click Create VLAN Pool  (CostelloTN_VlanPool)
 
                                 1.1 Allocation Mode: Static Allocation
