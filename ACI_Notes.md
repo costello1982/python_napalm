@@ -70,20 +70,27 @@ I will create a pool of VLANs which will be used as ENCAP VLANs on access ports 
                                             1.2.2 Allocation Mode: Static Allocation
 ![VLAN Pool](ACI_Images/Step1.jpg)
 
+After VLAN pool is created, we configure physical domain which will use that VLAN pool. There already is a “phys” domain so we just configure the new pool to be used in it:
+
 2. Create Physical and External Domains: Fabric > Access Policies > Physical and External Domains > Physical Domains > Right Click Create Physical Domain (CostelloTN_PhyDom)
 
                                 2.1 Select VLAN Pool Created at Step 1 CostelloTN_VlanPool
 ![VLAN Pool](ACI_Images/Step2.jpg)
+
+The domain is now ready to be used inside AAEP (Attachable Access Entity Profile). Don’t ask, this AAEP, related to configured domain in it is used in every EPG later on. In that way, interface configuration is able to be build and pushed to the switch. I see that AAEP as a pivot – policy connecting object, or maybe as a Primary Key in Relational database as the ACI config seems to be structured just like a relational database.
 
 3. Create Attachable Access Entity Profiles (AAEP): Fabric > Access Policies > Policies > Global > Attachable Access Entity Profile > Right Click Create (CostelloTN_AAEProf)
               
                                 3.1 Click + to add attach the Domain that we created at the Step2 CostelloTN_PhyDom
                                 3.2 For the rest we let them like that for now. Next and Finish.
 ![VLAN Pool](ACI_Images/Step3.jpg)
+
 4. Create Interface Policy: Fabric > Access Policies > Policies > Interface 
                                 
                                 4.1 Create CDP Interface, etc
                                 4.2 In my version they were some defaults that I will use where is already enable. I don't have to configure anything at this step. ACI 6.0(3d)
+
+Now we create Leaf Interface Profiles, objects that will be created only once and will represent the Interfaces of each Leaf. Later when you would need a new port configured on ACI, you will just add Interface Selector inside one of the Leafs Interface Profiles.
 
 5. Create Interface Profile: Fabric > Access Policies > Interfaces > Leaf Interfaces > Profile > Right Click Create (Leaf101_IntProf), then Submit without adding Interface Selectors.
                                 
@@ -103,6 +110,10 @@ I will create a pool of VLANs which will be used as ENCAP VLANs on access ports 
 7. Create VPC Domain: This can be created once you create your ACI fabric or after. When you configuring vPC interface teaming you first need to have vPC domain configured which is done for each two pair of vPC Leafs: Fabric > Access Policies > Policies > Switch > Virtual Port Channel Default.
 
 8. Create VPC Interface with LACP Policy Group: Fabric > Access Policies > Interfaces > Leaf Interfaces > Policy Groups > VPC Interface 
+
+After you define the vPC domain, you can go back and configure the vPC Interface Policy Group. Please remember, this one is done separately for each vPC port pair and cannot be reused later for other few ports in another vPC config.
+
+The thing to note here is that you need Port Channel Policy inside this one, everything else is the same as for normal access port Policy Group:
                               
                                 8.1 VPC Interface Right Click Create, Name (servername-db_vPC)
                                 8.2 Description each server port.
@@ -136,9 +147,14 @@ In order to get some endpoints mapped inside some EPGs we need to configure the 
 2. Create a VRF: Tenants > CostelloTN_PROD > Networking > VRFs > Right Click Create VRF (01aPRD_DB_VRF)
 
                                 2.1 Un-check Create A Bridge Domain (We will do this at the next step)
-![VLAN Pool](ACI_Images/Logical/Step2.jpg)                                
+![VLAN Pool](ACI_Images/Logical/Step2.jpg)     
+
+Create first Bridge Domain representing a VLAN L2 Broadcast Domain. Take care to give it a name and select the proper VRF in which it will reside, in our case the only VRF GRT (global routing table):
+
 3. Create a Bridge Domain (BD): Tenants > CostelloTN_PROD > Networking > Bridge Domains > Right Click Create (MDC_VL200_BrDom)
-                                
+
+BD being an L2 domain it still provides the means to limit the communication between members of same BD but placed in different EPGs (part of that same BD). Something like private VLANs but with the option to define some kind of Access-List and let some traffic flow between them and some not (and everything inside same L2 domain). Strange!, but it’s a way to create microSegmented configuration later on.
+
                                 3.1 VRF > Select the VRF created at Step 2 > 01aPRD_DB_VRF
 ![VLAN Pool](ACI_Images/Logical/Step3.jpg)                                
 4. Create APP Profile: Tenants > CostelloTN_PROD > Application Profiles > Right Click Create (01aPRD_DB_AppProf)
@@ -147,9 +163,15 @@ In order to get some endpoints mapped inside some EPGs we need to configure the 
                                 
                                 5.1 select the Bridge Domain Created at step 3 MDC_VL200_BrDom
 ![VLAN Pool](ACI_Images/Logical/Step5.jpg)
+
+EPG needs domain association in order to pull all the interface and Leaf configuration done above in Leaf and Interface selector profiles so it knows got to physically configure the interfaces that will be mapped to that EPG later on:
+
 6. Add Domain to EPG: Tenants > CostelloTN_PROD > Application Profiles > 01aPRD_DB_AppProf > Application EPGs >  MDC_VL200_EPG > Domains >Right Click Add Physical Domain Association > Select CostelloTN_PhyDom
-![VLAN Pool](ACI_Images/Logical/Step6.jpg)                             
-7. Static Port Map to EPG: Tenants > CostelloTN_PROD > Application Profiles > 01aPRD_DB_AppProf > Application EPGs >  MDC_VL200_EPG > Right Click Create:
+![VLAN Pool](ACI_Images/Logical/Step6.jpg)
+
+After domain association we can continue and create our first interface to EPG mapping (Static Ports) which will effectively take whole interface configuration in ACI policy model plus the Application policy and encap VLAN ID and push that to Leaf interface:
+
+8. Static Port Map to EPG: Tenants > CostelloTN_PROD > Application Profiles > 01aPRD_DB_AppProf > Application EPGs >  MDC_VL200_EPG > Right Click Create:
                                 
                                 7.1 Select Node Leaf-101
                                 7.2 Path - 1/1 servername-eth0
